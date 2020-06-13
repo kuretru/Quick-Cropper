@@ -5,8 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kuretru.QuickCropper"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="快裁图" Height="600" Width="960" WindowStartupLocation="CenterScreen" MinWidth="480" MinHeight="300">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="10,10,5,10">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="原始图片" Margin="0">
+                <Grid Margin="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Margin="0"/>
+                    <Label Content="Label" Margin="5" Grid.Row="1" Height="24" HorizontalAlignment="Center" />
+                </Grid>
+            </GroupBox>
+            <Label Content="Label" Margin="0" Grid.Row="1" Height="24" HorizontalAlignment="Center"/>
+            <ProgressBar Margin="0" Grid.Row="2" Height="15"/>
+        </Grid>
+        <Grid Grid.Column="1" Margin="5,10,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="目标图片" Margin="0">
+                <Image Margin="5"/>
+            </GroupBox>
+            <GroupBox Header="控制面板" Margin="0" Grid.Row="1">
+                <StackPanel Margin="0">
+                    <Button x:Name="StartButton" Content="选择图片目录" Width="160" Height="40" Click="StartButton_Click"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Label Content="输出大小：" VerticalAlignment="Center"/>
+                        <TextBox TextWrapping="Wrap" Text="96" Width="60" VerticalAlignment="Center"/>
+                        <Label Content="X" VerticalAlignment="Center"/>
+                        <TextBox TextWrapping="Wrap" Text="96" Width="60" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Button x:Name="NextButton" Content="完成，下一张" Height="40" Width="160" Click="NextButton_Click"/>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
     </Grid>
 </Window>

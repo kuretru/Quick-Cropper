@@ -24,5 +24,16 @@ namespace Kuretru.QuickCropper
         {
             InitializeComponent();
         }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 }
