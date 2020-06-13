@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick-Cropper", "Quick-Cropper\Quick-Cropper.csproj", "{BBABAA9B-9D8D-4606-955A-E9C3EE678065}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BBABAA9B-9D8D-4606-955A-E9C3EE678065}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBABAA9B-9D8D-4606-955A-E9C3EE678065}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBABAA9B-9D8D-4606-955A-E9C3EE678065}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBABAA9B-9D8D-4606-955A-E9C3EE678065}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {30D808B6-00D8-4292-8A2C-0AD499877F16}
+	EndGlobalSection
+EndGlobal
