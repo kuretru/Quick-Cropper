@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick-Cropper", "Quick-Cropper\Quick-Cropper.csproj", "{BBABAA9B-9D8D-4606-955A-E9C3EE678065}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AADA3516-FF2A-4C8D-AC3F-43C38ACB7BE4} = {AADA3516-FF2A-4C8D-AC3F-43C38ACB7BE4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CroppingImageLibrary", "CroppingImageLibrary\CroppingImageLibrary.csproj", "{AADA3516-FF2A-4C8D-AC3F-43C38ACB7BE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +20,10 @@ Global
 		{BBABAA9B-9D8D-4606-955A-E9C3EE678065}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBABAA9B-9D8D-4606-955A-E9C3EE678065}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBABAA9B-9D8D-4606-955A-E9C3EE678065}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AADA3516-FF2A-4C8D-AC3F-43C38ACB7BE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AADA3516-FF2A-4C8D-AC3F-43C38ACB7BE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AADA3516-FF2A-4C8D-AC3F-43C38ACB7BE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AADA3516-FF2A-4C8D-AC3F-43C38ACB7BE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
