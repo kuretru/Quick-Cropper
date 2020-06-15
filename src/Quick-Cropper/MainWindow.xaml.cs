@@ -1,7 +1,11 @@
-﻿using Kuretru.QuickCropper.Entity;
+﻿using CroppingImageLibrary.Services;
+using Kuretru.QuickCropper.Entity;
 using Kuretru.QuickCropper.Factory;
 using Kuretru.QuickCropper.Util;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -15,9 +19,12 @@ namespace Kuretru.QuickCropper
     public partial class MainWindow : Window
     {
 
-        private WorkProgress workProgress = new WorkProgress();
-        private ImageSize targetImageSize = new ImageSize(96, 96);
+        private readonly WorkProgress workProgress = new WorkProgress();
+        private readonly ImageSize targetImageSize = new ImageSize(96, 96);
         private List<string> imageFiles = null;
+        private Image currentBitmap;
+        private Image targetBitmap;
+        private string saveFolder = "";
 
         public MainWindow()
         {
@@ -26,29 +33,41 @@ namespace Kuretru.QuickCropper
             InitializeControl();
         }
 
+        /// <summary>
+        /// 载入下一张图片
+        /// </summary>
         private void LoadNextImage()
         {
             string imageFile = imageFiles[workProgress.Step];
-            BitmapImage image = new BitmapImage(new System.Uri(imageFile));
+            BitmapImage image = new BitmapImage(new Uri(imageFile));
 
             cropTool.SetImage(image);
             imageNameLabel.Content = FileUtils.GetFileName(imageFile);
-            SetCropPosition();
+            currentBitmap = Image.FromFile(imageFile);
 
-            targetImage.Source = image;
             workProgress.Step++;
+            //SetDefaultCropPosition();
+        }
+
+        /// <summary>
+        /// 保存当前图片
+        /// </summary>
+        private void SaveImage()
+        {
+
+            string path = saveFolder + imageNameLabel.Content;
+            targetBitmap.Save(path, ImageFormat.Png);
         }
 
         /// <summary>
         /// 设置裁切框默认位置
         /// </summary>
         /// <returns></returns>
-        private void SetCropPosition()
+        private void SetDefaultCropPosition()
         {
-            double width = 0;
-            double height = 0;
+            double width, height;
 
-            Size imageSize = cropTool.GetImageRendierSize();
+            var imageSize = cropTool.GetImageRenderSize();
             double imageAspectRatio = imageSize.Width / imageSize.Height;
             double targetAspectRatio = targetImageSize.Width / targetImageSize.Height;
             if (targetAspectRatio < imageAspectRatio)
@@ -98,6 +117,12 @@ namespace Kuretru.QuickCropper
                     return;
                 }
 
+                saveFolder = imageFolderPath + "\\cropped\\";
+                if (!Directory.Exists(saveFolder))
+                {
+                    Directory.CreateDirectory(saveFolder);
+                }
+
                 EnableControlPanel(true);
                 LoadNextImage();
             }
@@ -105,12 +130,47 @@ namespace Kuretru.QuickCropper
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
+            SaveImage();
             if (workProgress.Step >= workProgress.Total)
             {
                 System.Windows.Forms.MessageBox.Show("所有图片已裁切完毕。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             LoadNextImage();
+        }
+
+        private void ComputeButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetDefaultCropPosition();
+        }
+
+        private void CropTool_CroppedAreaChanged(object sender)
+        {
+            if (currentBitmap == null)
+            { return; }
+
+            CropArea cropArea = cropTool.CropService.GetCroppedArea();
+
+            if (cropArea.CroppedRectAbsolute.Width == 0 || cropArea.CroppedRectAbsolute.Height == 0)
+            { return; }
+
+            var renderSize = cropTool.GetImageRenderSize();
+            double proportion = (renderSize.Width / currentBitmap.Width + renderSize.Height / currentBitmap.Height) / 2;
+
+            int x = (int)((cropArea.CroppedRectAbsolute.X - (cropTool.ActualWidth - renderSize.Width) / 2) / proportion);
+            int y = (int)((cropArea.CroppedRectAbsolute.Y - (cropTool.ActualHeight - renderSize.Height) / 2) / proportion);
+            int width = (int)(cropArea.CroppedRectAbsolute.Width / proportion);
+            int height = (int)(cropArea.CroppedRectAbsolute.Height / proportion);
+
+            Rectangle cropRectangle = new Rectangle(x, y, width, height);
+            Rectangle targetRectangle = new Rectangle(0, 0, width, height);
+            targetBitmap = new Bitmap(width, height);
+            using (Graphics g = Graphics.FromImage(targetBitmap))
+            {
+                g.DrawImage(currentBitmap, targetRectangle, cropRectangle, GraphicsUnit.Pixel);
+            }
+
+            targetImage.Source = ImageUtils.Convert(targetBitmap);
         }
 
         /// <summary>
@@ -127,6 +187,7 @@ namespace Kuretru.QuickCropper
         /// </summary>
         private void InitializeControl()
         {
+            cropTool.CroppedAreaChangedEvent += CropTool_CroppedAreaChanged;
             imageNameLabel.Content = "";
             EnableControlPanel(false);
         }
@@ -140,14 +201,10 @@ namespace Kuretru.QuickCropper
             targetImageWidthTextBox.IsEnabled = enabled;
             targetImageHeightTextBox.IsEnabled = enabled;
             nextButton.IsEnabled = enabled;
+            computeButton.IsEnabled = enabled;
 
             workProgress.Step = 0;
             workProgress.Total = enabled ? imageFiles.Count : 0;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            SetCropPosition();
         }
     }
 }

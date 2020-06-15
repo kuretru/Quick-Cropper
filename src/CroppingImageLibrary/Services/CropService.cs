@@ -1,12 +1,11 @@
-﻿using CroppingImageLibrary.Services.State;
+﻿using CroppingImageLibrary.Services.Event;
+using CroppingImageLibrary.Services.State;
 using CroppingImageLibrary.Services.Tools;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace CroppingImageLibrary.Services
 {
@@ -34,6 +33,8 @@ namespace CroppingImageLibrary.Services
         private readonly IToolState _dragState;
         private readonly IToolState _completeState;
 
+        public event CroppedAreaChangedHandler CroppedAreaChangedEvent;
+
         public Adorner Adorner => _cropAdorner;
 
         private enum TouchPoint
@@ -56,6 +57,7 @@ namespace CroppingImageLibrary.Services
             adornerLayer.Add(_cropAdorner);
 
             _cropTool = new CropTool(_canvas);
+            _cropTool.CroppedAreaChangedEvent += OnCroppedAreaChanged;
             _createState = new CreateState(_cropTool, _canvas);
             _completeState = new CompleteState();
             _dragState = new DragState(_cropTool, _canvas);
@@ -94,6 +96,11 @@ namespace CroppingImageLibrary.Services
         public void SetCropArea(double left, double top, double width, double height)
         {
             _cropTool.Redraw(left, top, width, height);
+        }
+
+        private void OnCroppedAreaChanged(object sender)
+        {
+            CroppedAreaChangedEvent?.Invoke(sender);
         }
 
         private void AdornerOnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)

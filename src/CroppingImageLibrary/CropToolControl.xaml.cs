@@ -1,4 +1,5 @@
 ﻿using CroppingImageLibrary.Services;
+using CroppingImageLibrary.Services.Event;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,6 +12,9 @@ namespace CroppingImageLibrary
     /// </summary>
     public partial class CropToolControl : UserControl
     {
+
+        public event CroppedAreaChangedHandler CroppedAreaChangedEvent;
+
         public CropService CropService { get; private set; }
 
         public CropToolControl()
@@ -22,9 +26,14 @@ namespace CroppingImageLibrary
         /// 获取图片实际渲染大小
         /// </summary>
         /// <returns>图片实际渲染大小</returns>
-        public Size GetImageRendierSize()
+        public Size GetImageRenderSize()
         {
             return SourceImage.RenderSize;
+        }
+
+        private void OnCroppedAreaChanged(object sender)
+        {
+            CroppedAreaChangedEvent(sender);
         }
 
         private void RootGrid_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -48,6 +57,7 @@ namespace CroppingImageLibrary
         private void RootGrid_Loaded(object sender, RoutedEventArgs e)
         {
             CropService = new CropService(this);
+            CropService.CroppedAreaChangedEvent += OnCroppedAreaChanged;
         }
 
         public void SetImage(BitmapImage bitmapImage)

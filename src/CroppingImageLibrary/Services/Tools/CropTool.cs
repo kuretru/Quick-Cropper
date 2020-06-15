@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using CroppingImageLibrary.Services.Event;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -18,6 +19,8 @@ namespace CroppingImageLibrary.Services.Tools
         public double BottomRightY => Canvas.GetTop(_cropShape.Shape) + _cropShape.Shape.Height;
         public double Height => _cropShape.Shape.Height;
         public double Width => _cropShape.Shape.Width;
+
+        public event CroppedAreaChangedHandler CroppedAreaChangedEvent;
 
         public CropTool(Canvas canvas)
         {
@@ -63,6 +66,7 @@ namespace CroppingImageLibrary.Services.Tools
             _shadeService.Redraw();
             _thumbService.Redraw();
             _textService.Redraw();
+            CroppedAreaChangedEvent(this);
         }
 
         public void Resize()

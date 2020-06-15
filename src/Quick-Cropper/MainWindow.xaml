@@ -42,15 +42,17 @@
             </GroupBox>
             <GroupBox Header="控制面板" Margin="0" Grid.Row="1">
                 <StackPanel Margin="0">
-                    <Button x:Name="startButton" Content="选择图片目录" Width="160" Height="40" Click="StartButton_Click"/>
+                    <Button x:Name="startButton" Content="选择图片目录" Width="160" Height="40" Click="StartButton_Click" Margin="5"/>
                     <StackPanel x:Name="targetImageSizeStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Label Content="输出大小：" VerticalAlignment="Center"/>
                         <TextBox x:Name="targetImageWidthTextBox" TextWrapping="Wrap" Text="{Binding Width}" Width="60" VerticalAlignment="Center"/>
                         <Label Content="X" VerticalAlignment="Center"/>
                         <TextBox x:Name="targetImageHeightTextBox" TextWrapping="Wrap" Text="{Binding Height}" Width="60" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <Button x:Name="nextButton" Content="完成，下一张" Height="40" Width="160" Click="NextButton_Click"/>
-                    <Button Content="Button" Click="Button_Click"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button x:Name="nextButton" Content="完成，下一张" Height="40" Width="160" Click="NextButton_Click" Margin="5"/>
+                        <Button x:Name="computeButton" Content="自动计算裁切框" Click="ComputeButton_Click" Width="160" Height="40" Margin="5"/>
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
         </Grid>

@@ -61,6 +61,7 @@
     <Compile Include="Entity\ImageSize.cs" />
     <Compile Include="Entity\WorkProgress.cs" />
     <Compile Include="Util\FileUtils.cs" />
+    <Compile Include="Util\ImageUtils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
