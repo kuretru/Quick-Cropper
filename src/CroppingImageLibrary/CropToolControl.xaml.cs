@@ -18,12 +18,29 @@ namespace CroppingImageLibrary
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 获取图片实际渲染大小
+        /// </summary>
+        /// <returns>图片实际渲染大小</returns>
+        public Size GetImageRendierSize()
+        {
+            return SourceImage.RenderSize;
+        }
+
+        private void RootGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (CropService != null)
+            {
+                CropService.Reisze();
+            }
+        }
+
         private void RootGrid_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             CropService.Adorner.RaiseEvent(e);
         }
 
-        private void RootGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void RootGrid_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             CropService.Adorner.RaiseEvent(e);
         }

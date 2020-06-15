@@ -15,6 +15,11 @@ namespace Kuretru.QuickCropper.Util
             SUFFIXS = new List<string>(suffixs);
         }
 
+        /// <summary>
+        /// 根据后缀名判断文件是否是图片
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <returns>是否是图片</returns>
         public static bool IsImageFile(string path)
         {
             string suffix = GetSuffix(path);
@@ -29,7 +34,12 @@ namespace Kuretru.QuickCropper.Util
             return false;
         }
 
-        static string GetSuffix(string path)
+        /// <summary>
+        /// 获取文件后缀名
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <returns>文件后缀名</returns>
+        public static string GetSuffix(string path)
         {
             if (path == null || path.Length == 0)
             {
@@ -41,6 +51,25 @@ namespace Kuretru.QuickCropper.Util
                 return "";
             }
             return path.Substring(index).ToLower();
+        }
+
+        /// <summary>
+        /// 获取文件名
+        /// </summary>
+        /// <param name="path">文件路径</param>
+        /// <returns>文件名</returns>
+        public static string GetFileName(string path)
+        {
+            if (path == null || path.Length == 0)
+            {
+                return "";
+            }
+            int index = path.LastIndexOf("\\");
+            if (index == -1)
+            {
+                return "";
+            }
+            return path.Substring(index + 1).ToLower();
         }
 
     }

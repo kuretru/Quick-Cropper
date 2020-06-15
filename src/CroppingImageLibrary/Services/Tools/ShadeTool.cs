@@ -10,10 +10,14 @@ namespace CroppingImageLibrary.Services.Tools
         private readonly CropTool _cropTool;
         private readonly RectangleGeometry _rectangleGeo;
 
+        private readonly Canvas _canvas;
+        private readonly GeometryGroup _geometryGroup;
+
         public Path ShadeOverlay { get; set; }
 
         public ShadeTool(Canvas canvas, CropTool cropTool)
         {
+            _canvas = canvas;
             _cropTool = cropTool;
 
             ShadeOverlay = new Path
@@ -22,9 +26,8 @@ namespace CroppingImageLibrary.Services.Tools
                 Opacity = 0.5
             };
 
-            var geometryGroup = new GeometryGroup();
-            RectangleGeometry geometry1 =
-                new RectangleGeometry(new Rect(new Size(canvas.Width, canvas.Height)));
+            _geometryGroup = new GeometryGroup();
+            RectangleGeometry geometry1 = new RectangleGeometry(new Rect(new Size(_canvas.Width, _canvas.Height)));
             _rectangleGeo = new RectangleGeometry(
                 new Rect(
                     _cropTool.TopLeftX,
@@ -33,9 +36,9 @@ namespace CroppingImageLibrary.Services.Tools
                     _cropTool.Height
                 )
             );
-            geometryGroup.Children.Add(geometry1);
-            geometryGroup.Children.Add(_rectangleGeo);
-            ShadeOverlay.Data = geometryGroup;
+            _geometryGroup.Children.Add(geometry1);
+            _geometryGroup.Children.Add(_rectangleGeo);
+            ShadeOverlay.Data = _geometryGroup;
         }
 
         public void Redraw()
@@ -46,6 +49,11 @@ namespace CroppingImageLibrary.Services.Tools
                 _cropTool.Width,
                 _cropTool.Height
             );
+        }
+
+        public void Resize()
+        {
+            _geometryGroup.Children[0] = new RectangleGeometry(new Rect(new Size(_canvas.Width, _canvas.Height)));
         }
     }
 }

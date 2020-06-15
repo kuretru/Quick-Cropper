@@ -24,11 +24,11 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <CroppingImageLibrary:CropToolControl x:Name="cropTool" Margin="5"/>
-                    <Label x:Name="imageNameLabel" Content="Label" Margin="5" Grid.Row="1" Height="24" HorizontalAlignment="Center" />
+                    <Label x:Name="imageNameLabel" Margin="5" Grid.Row="1" Height="25" HorizontalAlignment="Center" Content="imageNameLabel" />
                 </Grid>
             </GroupBox>
             <StackPanel x:Name="progressStackPanel" Margin="10,0" Grid.Row="1">
-                <Label x:Name="progressLabel" Content="{Binding Text}" Margin="0,5" Height="24" HorizontalAlignment="Center"/>
+                <Label x:Name="progressLabel" Content="{Binding Text}" Margin="0,5" Height="25" HorizontalAlignment="Center"/>
                 <ProgressBar Margin="0,5" Height="15" Value="{Binding Step}" Maximum="{Binding Total}"/>
             </StackPanel>
         </Grid>
@@ -50,6 +50,7 @@
                         <TextBox x:Name="targetImageHeightTextBox" TextWrapping="Wrap" Text="{Binding Height}" Width="60" VerticalAlignment="Center"/>
                     </StackPanel>
                     <Button x:Name="nextButton" Content="完成，下一张" Height="40" Width="160" Click="NextButton_Click"/>
+                    <Button Content="Button" Click="Button_Click"/>
                 </StackPanel>
             </GroupBox>
         </Grid>

@@ -1,12 +1,12 @@
-﻿using System.Diagnostics;
+﻿using CroppingImageLibrary.Services.State;
+using CroppingImageLibrary.Services.Tools;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using CroppingImageLibrary.Services.State;
-using CroppingImageLibrary.Services.Tools;
 
 namespace CroppingImageLibrary.Services
 {
@@ -27,6 +27,7 @@ namespace CroppingImageLibrary.Services
         private readonly CropAdorner _cropAdorner;
         private readonly Canvas _canvas;
         private readonly Tools.CropTool _cropTool;
+        private readonly FrameworkElement _adornedElement;
 
         private IToolState _currentToolState;
         private readonly IToolState _createState;
@@ -43,6 +44,7 @@ namespace CroppingImageLibrary.Services
 
         public CropService(FrameworkElement adornedElement)
         {
+            _adornedElement = adornedElement;
             _canvas = new Canvas
             {
                 Height = adornedElement.ActualHeight,
@@ -53,20 +55,6 @@ namespace CroppingImageLibrary.Services
             Debug.Assert(adornerLayer != null, nameof(adornerLayer) + " != null");
             adornerLayer.Add(_cropAdorner);
 
-            var cropShape = new CropShape(
-                new Rectangle
-                {
-                    Height = 0,
-                    Width = 0,
-                    Stroke = Brushes.Black,
-                    StrokeThickness = 1.5
-                },
-                new Rectangle
-                {
-                    Stroke = Brushes.White,
-                    StrokeDashArray = new DoubleCollection(new double[] { 4, 4 })
-                }
-            );
             _cropTool = new CropTool(_canvas);
             _createState = new CreateState(_cropTool, _canvas);
             _completeState = new CompleteState();
@@ -85,6 +73,28 @@ namespace CroppingImageLibrary.Services
                 _cropAdorner.RenderSize,
                 new Rect(_cropTool.TopLeftX, _cropTool.TopLeftY, _cropTool.Width, _cropTool.Height)
             );
+
+        /// <summary>
+        /// 改变窗体大小时，重新设置画板大小
+        /// </summary>
+        public void Reisze()
+        {
+            _canvas.Width = _adornedElement.ActualWidth;
+            _canvas.Height = _adornedElement.ActualHeight;
+            _cropTool.Resize();
+        }
+
+        /// <summary>
+        /// 重新设置裁切框位置与大小
+        /// </summary>
+        /// <param name="left">裁切框左上角位置横坐标</param>
+        /// <param name="top">裁切框左上角位置纵坐标</param>
+        /// <param name="width">裁切框宽度</param>
+        /// <param name="height">裁切框高度</param>
+        public void SetCropArea(double left, double top, double width, double height)
+        {
+            _cropTool.Redraw(left, top, width, height);
+        }
 
         private void AdornerOnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {

@@ -22,13 +22,15 @@ namespace CroppingImageLibrary.Services.Tools
         public CropTool(Canvas canvas)
         {
             _canvas = canvas;
-            _cropShape = new CropShape(new Rectangle {
-                    Height = 0,
-                    Width = 0,
-                    Stroke = Brushes.Black,
-                    StrokeThickness = 1.5
-                },
-                new Rectangle {
+            _cropShape = new CropShape(new Rectangle
+            {
+                Height = 0,
+                Width = 0,
+                Stroke = Brushes.Black,
+                StrokeThickness = 1.5
+            },
+                new Rectangle
+                {
                     Stroke = Brushes.White,
                     StrokeDashArray = new DoubleCollection(new double[] { 4, 4 })
                 });
@@ -61,6 +63,11 @@ namespace CroppingImageLibrary.Services.Tools
             _shadeService.Redraw();
             _thumbService.Redraw();
             _textService.Redraw();
+        }
+
+        public void Resize()
+        {
+            _shadeService.Resize();
         }
     }
 }

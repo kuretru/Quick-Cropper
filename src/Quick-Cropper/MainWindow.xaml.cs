@@ -28,10 +28,46 @@ namespace Kuretru.QuickCropper
 
         private void LoadNextImage()
         {
-            BitmapImage image = new BitmapImage(new System.Uri(imageFiles[workProgress.Step]));
+            string imageFile = imageFiles[workProgress.Step];
+            BitmapImage image = new BitmapImage(new System.Uri(imageFile));
+
             cropTool.SetImage(image);
+            imageNameLabel.Content = FileUtils.GetFileName(imageFile);
+            SetCropPosition();
+
             targetImage.Source = image;
             workProgress.Step++;
+        }
+
+        /// <summary>
+        /// 设置裁切框默认位置
+        /// </summary>
+        /// <returns></returns>
+        private void SetCropPosition()
+        {
+            double width = 0;
+            double height = 0;
+
+            Size imageSize = cropTool.GetImageRendierSize();
+            double imageAspectRatio = imageSize.Width / imageSize.Height;
+            double targetAspectRatio = targetImageSize.Width / targetImageSize.Height;
+            if (targetAspectRatio < imageAspectRatio)
+            {
+                // 先计算高度，再根据比例计算宽度
+                height = imageSize.Height;
+                width = height * targetAspectRatio;
+            }
+            else
+            {
+                // 先计算宽度，在根据比例计算高度
+                width = imageSize.Width;
+                height = width / targetAspectRatio;
+            }
+
+            double left = (cropTool.RenderSize.Width - width) / 2;
+            double top = (cropTool.RenderSize.Height - height) / 2;
+
+            cropTool.CropService.SetCropArea(left, top, width, height);
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -91,6 +127,7 @@ namespace Kuretru.QuickCropper
         /// </summary>
         private void InitializeControl()
         {
+            imageNameLabel.Content = "";
             EnableControlPanel(false);
         }
 
@@ -108,5 +145,9 @@ namespace Kuretru.QuickCropper
             workProgress.Total = enabled ? imageFiles.Count : 0;
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            SetCropPosition();
+        }
     }
 }
