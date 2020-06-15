@@ -54,9 +54,11 @@ namespace Kuretru.QuickCropper
         /// </summary>
         private void SaveImage()
         {
-
+            Rectangle source = new Rectangle(0, 0, targetBitmap.Width, targetBitmap.Height);
+            Rectangle target = new Rectangle(0, 0, targetImageSize.Width, targetImageSize.Height);
+            Image image = ImageUtils.Copy(targetBitmap, source, target);
             string path = saveFolder + imageNameLabel.Content;
-            targetBitmap.Save(path, ImageFormat.Png);
+            image.Save(path, ImageFormat.Png);
         }
 
         /// <summary>
@@ -130,6 +132,11 @@ namespace Kuretru.QuickCropper
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
+            if (targetBitmap == null)
+            {
+                System.Windows.Forms.MessageBox.Show("请选择裁切区域", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             SaveImage();
             if (workProgress.Step >= workProgress.Total)
             {
@@ -164,11 +171,7 @@ namespace Kuretru.QuickCropper
 
             Rectangle cropRectangle = new Rectangle(x, y, width, height);
             Rectangle targetRectangle = new Rectangle(0, 0, width, height);
-            targetBitmap = new Bitmap(width, height);
-            using (Graphics g = Graphics.FromImage(targetBitmap))
-            {
-                g.DrawImage(currentBitmap, targetRectangle, cropRectangle, GraphicsUnit.Pixel);
-            }
+            targetBitmap = ImageUtils.Copy(currentBitmap, cropRectangle, targetRectangle);
 
             targetImage.Source = ImageUtils.Convert(targetBitmap);
         }
